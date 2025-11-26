@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>PDF Merger – Fast & Secure Online Tool</title>
+  <title>PDF Studio – Merge, Convert, Compress & More</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Merge multiple PDF files into a single document. Fast, free, and secure – all processing happens in your browser." />
+  <meta name="description" content="All-in-one PDF tools: merge PDFs, convert JPG to PDF, PDF to JPG, compress PDFs, and basic editing – all in your browser." />
   <meta name="robots" content="index,follow" />
 
   <style>
@@ -63,7 +63,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 24px;
+      margin-bottom: 18px;
     }
 
     .brand {
@@ -134,15 +134,65 @@
       border-color: var(--accent);
     }
 
-    main {
+    .hero-title {
+      font-size: clamp(1.6rem, 3vw, 2rem);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin: 4px 0 6px;
+    }
+
+    .hero-subtitle {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      max-width: 34rem;
+    }
+
+    .tool-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0 14px;
+    }
+
+    .tool-tab {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      background: rgba(148, 163, 184, 0.05);
+      color: var(--muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background var(--transition-fast), color var(--transition-fast),
+        border var(--transition-fast), transform 0.1s ease-out;
+    }
+
+    .tool-tab span.icon {
+      font-size: 0.9rem;
+    }
+
+    .tool-tab.active {
+      background: #111827;
+      color: #f9fafb;
+      border-color: #020617;
+    }
+
+    .tool-tab:hover {
+      transform: translateY(-1px);
+    }
+
+    .layout {
       display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
       gap: 24px;
       align-items: flex-start;
     }
 
     @media (max-width: 800px) {
-      main {
+      .layout {
         grid-template-columns: minmax(0, 1fr);
       }
     }
@@ -152,7 +202,7 @@
       backdrop-filter: blur(10px);
       border-radius: var(--radius-lg);
       border: 1px solid rgba(148, 163, 184, 0.25);
-      padding: 20px 18px 18px;
+      padding: 16px 16px 16px;
       box-shadow: var(--shadow-soft);
     }
 
@@ -160,46 +210,12 @@
       background: radial-gradient(circle at top left, #020617, #020617);
     }
 
-    .hero-title {
-      font-size: clamp(1.6rem, 3vw, 2rem);
-      line-height: 1.15;
-      letter-spacing: -0.03em;
-      margin: 0 0 8px;
+    .tool-panel {
+      display: none;
     }
 
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 3px 9px;
-      border-radius: 999px;
-      background: rgba(52, 211, 153, 0.12);
-      font-size: 0.72rem;
-      color: #16a34a;
-      margin-bottom: 10px;
-    }
-
-    .hero-subtitle {
-      margin: 0 0 16px;
-      color: var(--muted);
-      font-size: 0.9rem;
-      max-width: 32rem;
-    }
-
-    .hero-list {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 14px;
-      font-size: 0.82rem;
-      color: var(--muted);
-      display: grid;
-      gap: 4px;
-    }
-
-    .hero-list li::before {
-      content: "•";
-      margin-right: 6px;
-      color: #22c55e;
+    .tool-panel.active {
+      display: block;
     }
 
     .small-label {
@@ -319,22 +335,6 @@
       color: var(--success);
     }
 
-    .pill-row {
-      margin-top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      font-size: 0.78rem;
-    }
-
-    .pill-tag {
-      padding: 3px 9px;
-      border-radius: 999px;
-      background: rgba(148, 163, 184, 0.12);
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      color: var(--muted);
-    }
-
     .side {
       display: grid;
       gap: 12px;
@@ -375,8 +375,59 @@
       color: var(--accent);
     }
 
+    .preview-img {
+      margin-top: 10px;
+      max-width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .inline-inputs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .inline-inputs input {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      background: rgba(15, 23, 42, 0.02);
+      color: var(--text);
+      min-width: 70px;
+    }
+
+    .inline-inputs input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .hint-small {
+      font-size: 0.76rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .pill-row {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.78rem;
+    }
+
+    .pill-tag {
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.12);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: var(--muted);
+    }
+
     .section {
-      margin-top: 26px;
+      margin-top: 24px;
       font-size: 0.86rem;
     }
 
@@ -430,15 +481,6 @@
     .footer-links a:hover {
       text-decoration: underline;
     }
-
-    a.intext {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    a.intext:hover {
-      text-decoration: underline;
-    }
   </style>
 </head>
 <body>
@@ -447,12 +489,12 @@
     <div class="brand">
       <div class="brand-logo" aria-hidden="true">P</div>
       <div>
-        <div class="brand-text-title">MergePDF</div>
-        <div class="brand-text-sub">Simple, private, in-browser PDF merge</div>
+        <div class="brand-text-title">PDF Studio</div>
+        <div class="brand-text-sub">Fast, private, in-browser PDF tools</div>
       </div>
     </div>
     <div class="header-right">
-      <div class="pill">No signup · Free forever</div>
+      <div class="pill">No signup · Free · Browser only</div>
       <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
         <span class="icon" id="themeIcon">🌙</span>
         <span id="themeText">Dark</span>
@@ -460,106 +502,224 @@
     </div>
   </header>
 
-  <main>
-    <!-- Left: main tool -->
-    <section class="card" aria-label="PDF merger tool">
-      <div class="hero-badge">
-        <span>✔</span>
-        100% local – PDFs never leave your device
-      </div>
-      <h1 class="hero-title">Merge PDF files in seconds.</h1>
-      <p class="hero-subtitle">
-        Drop your PDFs, click merge, and download a clean combined document.
-        No watermarks, no upload limits, and no account required.
-      </p>
+  <section>
+    <div class="hero-title">All your basic PDF tools in one place.</div>
+    <p class="hero-subtitle">
+      Merge, convert, compress, and lightly edit PDFs — everything runs directly on your device.
+      No uploads, no tracking, no watermarks.
+    </p>
 
-      <ul class="hero-list">
-        <li>All processing happens securely in your browser</li>
-        <li>Keep the file order by selecting PDFs in sequence</li>
-        <li>Works on mobile, tablet, and desktop</li>
-      </ul>
+    <div class="tool-tabs" aria-label="PDF tools">
+      <button class="tool-tab active" data-tool="merge"><span class="icon">➕</span>Merge PDF</button>
+      <button class="tool-tab" data-tool="jpg2pdf"><span class="icon">🖼️</span>JPG to PDF</button>
+      <button class="tool-tab" data-tool="pdf2jpg"><span class="icon">📄</span>PDF to JPG</button>
+      <button class="tool-tab" data-tool="compress"><span class="icon">📦</span>Compress PDF</button>
+      <button class="tool-tab" data-tool="edit"><span class="icon">✂️</span>Edit (Extract pages)</button>
+      <button class="tool-tab" data-tool="security"><span class="icon">🔐</span>Lock / Unlock info</button>
+    </div>
+  </section>
 
-      <div class="small-label">1. Choose your PDF files</div>
-      <div class="upload-box">
-        <div class="upload-top">
-          <div class="upload-info">
-            Tap the button to select 2 or more PDF files in the order you want them merged.
+  <section class="layout">
+    <!-- LEFT: MAIN TOOLS -->
+    <div class="card">
+      <!-- MERGE TOOL -->
+      <div class="tool-panel active" data-tool-panel="merge" aria-label="Merge PDF">
+        <div class="small-label">Merge multiple PDFs into one file</div>
+        <div class="upload-box">
+          <div class="upload-top">
+            <div class="upload-info">
+              Select 2 or more PDF files in the order you want them merged.
+            </div>
+            <label class="file-input">
+              <input id="mergeFiles" type="file" accept="application/pdf" multiple />
+              <span class="file-input-label"><span>📁</span><span>Select PDFs</span></span>
+            </label>
           </div>
-          <label class="file-input">
-            <input id="pdfFiles" type="file" accept="application/pdf" multiple />
-            <span class="file-input-label">
-              <span>📁</span> <span>Select PDFs</span>
-            </span>
-          </label>
+          <div class="file-hint" id="mergeSummary">No files selected yet.</div>
         </div>
-        <div class="file-hint" id="fileSummary">
-          No files selected yet.
+        <button id="mergeBtn" class="btn-primary" type="button">
+          <span class="icon">⇩</span><span>Merge & download PDF</span>
+        </button>
+        <div id="mergeStatus" class="status"></div>
+      </div>
+
+      <!-- JPG TO PDF TOOL -->
+      <div class="tool-panel" data-tool-panel="jpg2pdf" aria-label="JPG to PDF">
+        <div class="small-label">Convert one or more images to a single PDF</div>
+        <div class="upload-box">
+          <div class="upload-top">
+            <div class="upload-info">
+              Select JPG or PNG images. They will be added as pages in order.
+            </div>
+            <label class="file-input">
+              <input id="imgFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple />
+              <span class="file-input-label"><span>🖼️</span><span>Select images</span></span>
+            </label>
+          </div>
+          <div class="file-hint" id="imgSummary">No images selected yet.</div>
+        </div>
+        <button id="imgToPdfBtn" class="btn-primary" type="button">
+          <span class="icon">⇩</span><span>Convert to PDF</span>
+        </button>
+        <div id="imgStatus" class="status"></div>
+        <div class="hint-small">Note: Large or many images may be slower on mobile devices.</div>
+      </div>
+
+      <!-- PDF TO JPG TOOL -->
+      <div class="tool-panel" data-tool-panel="pdf2jpg" aria-label="PDF to JPG">
+        <div class="small-label">Export first page of a PDF as a JPG image</div>
+        <div class="upload-box">
+          <div class="upload-top">
+            <div class="upload-info">
+              Select a single PDF. This tool currently converts the first page to JPG.
+            </div>
+            <label class="file-input">
+              <input id="pdfToJpgFile" type="file" accept="application/pdf" />
+              <span class="file-input-label"><span>📄</span><span>Select PDF</span></span>
+            </label>
+          </div>
+          <div class="file-hint" id="pdfToJpgSummary">No PDF selected yet.</div>
+        </div>
+        <button id="pdfToJpgBtn" class="btn-primary" type="button">
+          <span class="icon">⇩</span><span>Convert first page to JPG</span>
+        </button>
+        <div id="pdfToJpgStatus" class="status"></div>
+        <img id="jpgPreview" class="preview-img" alt="JPG preview" style="display:none;" />
+        <div class="hint-small">Full multi-page export is more advanced and not included in this simple demo.</div>
+      </div>
+
+      <!-- COMPRESS TOOL -->
+      <div class="tool-panel" data-tool-panel="compress" aria-label="Compress PDF">
+        <div class="small-label">Try to reduce PDF size (basic re-save)</div>
+        <div class="upload-box">
+          <div class="upload-top">
+            <div class="upload-info">
+              Select a single PDF to re-save. This may slightly reduce file size.
+            </div>
+            <label class="file-input">
+              <input id="compressFile" type="file" accept="application/pdf" />
+              <span class="file-input-label"><span>📦</span><span>Select PDF</span></span>
+            </label>
+          </div>
+          <div class="file-hint" id="compressSummary">No PDF selected yet.</div>
+        </div>
+        <button id="compressBtn" class="btn-primary" type="button">
+          <span class="icon">⇩</span><span>Compress & download</span>
+        </button>
+        <div id="compressStatus" class="status"></div>
+        <div class="hint-small">
+          This is a light, browser-only compressor. For heavy optimization (e.g., reducing images),
+          dedicated desktop tools will work better.
         </div>
       </div>
 
-      <button id="mergeBtn" class="btn-primary" type="button">
-        <span class="icon">⇩</span>
-        <span>2. Merge & download PDF</span>
-      </button>
+      <!-- EDIT TOOL -->
+      <div class="tool-panel" data-tool-panel="edit" aria-label="Edit PDF (extract pages)">
+        <div class="small-label">Extract a range of pages into a new PDF</div>
+        <div class="upload-box">
+          <div class="upload-top">
+            <div class="upload-info">
+              Select a single PDF, then choose which pages to keep in the new file.
+            </div>
+            <label class="file-input">
+              <input id="editFile" type="file" accept="application/pdf" />
+              <span class="file-input-label"><span>✂️</span><span>Select PDF</span></span>
+            </label>
+          </div>
+          <div class="file-hint" id="editSummary">No PDF selected yet.</div>
+        </div>
 
-      <div id="status" class="status"></div>
+        <div class="inline-inputs">
+          <input id="editFrom" type="number" min="1" placeholder="From page" />
+          <input id="editTo" type="number" min="1" placeholder="To page" />
+        </div>
+        <div class="hint-small">Example: From 2 to 5 will create a PDF containing pages 2, 3, 4, and 5.</div>
 
-      <div class="pill-row">
-        <div class="pill-tag">Local processing</div>
-        <div class="pill-tag">No file size tracking</div>
-        <div class="pill-tag">Free tool</div>
+        <button id="editBtn" class="btn-primary" type="button">
+          <span class="icon">⇩</span><span>Extract pages to new PDF</span>
+        </button>
+        <div id="editStatus" class="status"></div>
       </div>
-    </section>
 
-    <!-- Right: info side -->
-    <aside class="side" aria-label="Information">
-      <div class="sub-card">
-        <h2 class="sub-title">How it works</h2>
-        <p class="sub-text">
-          MergePDF uses a tiny open-source library inside your browser
-          (no server) to combine pages from each file into a new PDF.
+      <!-- SECURITY INFO TOOL -->
+      <div class="tool-panel" data-tool-panel="security" aria-label="PDF security">
+        <div class="small-label">About locking & unlocking PDFs</div>
+        <p class="hint-small" style="margin-top:4px;">
+          Proper PDF password protection and removal involves encryption and decryption. To keep this demo
+          simple and safe, this site does <strong>not</strong> try to break or bypass existing passwords.
         </p>
-        <ol class="sub-list">
-          <li>Select your PDF files in the order you want.</li>
-          <li>Click “Merge & download PDF”.</li>
-          <li>Open the downloaded <strong>merged.pdf</strong>.</li>
-        </ol>
+        <ul class="sub-list" style="margin-top:8px;">
+          <li><strong>Locking PDFs:</strong> For strong, password-based protection, use a full PDF editor
+            (like Adobe Acrobat or other trusted apps) that supports encryption.
+          </li>
+          <li><strong>Unlocking PDFs:</strong> Only unlock files you own and have the password for.
+            Avoid tools that attempt to crack unknown passwords.
+          </li>
+          <li><strong>What this site does:</strong> All tools here are focused on structure changes
+            (merge, convert, extract) and do not alter security or encryption on your documents.
+          </li>
+        </ul>
+        <p class="hint-small">
+          This keeps the tools lightweight and avoids risky operations with your sensitive documents.
+        </p>
       </div>
+    </div>
 
+    <!-- RIGHT: INFO SIDE -->
+    <aside class="side">
       <div class="sub-card">
-        <h2 class="sub-title">Why it’s safe</h2>
+        <h2 class="sub-title">How this site works</h2>
+        <p class="sub-text">
+          All tools run entirely in your browser using small JavaScript libraries. Your PDFs and images
+          are processed in memory and are not sent to any server.
+        </p>
         <ul class="sub-list">
-          <li>Your PDFs are never uploaded to a server.</li>
-          <li>Everything runs locally in your browser memory.</li>
-          <li>Close the tab and the files are gone.</li>
+          <li>Merge: combine all pages from multiple PDFs into one file.</li>
+          <li>JPG → PDF: place each image on its own page.</li>
+          <li>PDF → JPG: render the first page as an image.</li>
+          <li>Edit: extract a page range into a fresh PDF.</li>
         </ul>
       </div>
 
       <div class="sub-card">
-        <h2 class="sub-title">Tips</h2>
+        <h2 class="sub-title">Best practices</h2>
         <ul class="sub-list">
-          <li>Need a different order? Re-select files in the correct sequence.</li>
-          <li>Try with a couple of small PDFs first to test.</li>
-          <li>Works best in modern browsers like Chrome, Edge, or Firefox.</li>
+          <li>Test with small files first to see results.</li>
+          <li>For very large PDFs, a desktop tool may be faster.</li>
+          <li>Never upload sensitive documents to websites you don’t fully trust.</li>
         </ul>
+      </div>
+
+      <div class="sub-card">
+        <h2 class="sub-title">About this project</h2>
+        <p class="sub-text">
+          This is a lightweight, educational PDF toolkit designed to show what’s possible directly
+          in the browser, with no backend server.
+        </p>
       </div>
     </aside>
-  </main>
+  </section>
 
   <!-- FAQ -->
   <section class="section" id="faq">
     <h2>FAQ</h2>
     <div class="faq-item">
-      <div class="faq-q">Do you store my PDFs?</div>
-      <p>No. All merging happens directly in your browser. We do not have a backend or database attached to this tool.</p>
+      <div class="faq-q">Do you upload my files?</div>
+      <p>No. The tools work using client-side JavaScript. Your PDFs and images stay in your browser’s memory.</p>
     </div>
     <div class="faq-item">
-      <div class="faq-q">Is this really free?</div>
-      <p>Yes. You can use this tool to merge as many PDF files as you like, without watermarks or login.</p>
+      <div class="faq-q">Is this suitable for confidential documents?</div>
+      <p>
+        For highly sensitive data, it is always safest to use offline tools on a device you control.
+        This site avoids servers, but you should still follow your own security policies.
+      </p>
     </div>
     <div class="faq-item">
-      <div class="faq-q">Which devices are supported?</div>
-      <p>Any modern browser on Windows, macOS, Linux, Android, or iOS should work. Performance depends on your device and PDF size.</p>
+      <div class="faq-q">Why does compression sometimes not reduce much?</div>
+      <p>
+        This demo uses basic re-saving. For heavy compression (aggressive image downscaling and re-encoding),
+        use a dedicated PDF compressor app.
+      </p>
     </div>
   </section>
 
@@ -567,18 +727,17 @@
   <section class="section" id="privacy">
     <h2>Privacy Policy</h2>
     <p>
-      This PDF merger is designed with privacy in mind. Your files are processed
-      directly in your browser using client-side JavaScript. We do not upload,
-      store, or share your documents on any server.
+      This website is built to avoid storing your documents. All PDF and image processing is done in your browser.
+      We do not collect the contents of your files.
     </p>
     <p>
-      Basic, anonymous technical data may be collected by your browser or hosting provider
-      (for example, standard access logs) when you visit this page. We do not use this tool
-      to build user profiles or track individual users.
+      Your browser or hosting provider may log basic technical information (like IP address, user agent,
+      and error logs) when you access the site. We do not use this tool to create user profiles or track
+      individual behavior.
     </p>
     <p style="font-size: 0.78rem;">
-      This is a simple utility tool and this privacy text is provided for general information only.
-      If you need strict legal compliance (e.g., for business use), please consult your own legal advisor.
+      If you need strict legal compliance (e.g., for corporate or regulated environments), please consult your
+      own legal and security teams before relying on this tool.
     </p>
   </section>
 
@@ -586,10 +745,10 @@
   <section class="section" id="terms">
     <h2>Terms of Use</h2>
     <ul>
-      <li>This tool is provided “as is”, without any warranty of any kind.</li>
-      <li>You are responsible for ensuring you have the right to handle and merge the PDF files you upload.</li>
+      <li>This tool is provided “as is”, without any warranties of any kind.</li>
+      <li>You are responsible for ensuring you have the right to handle and modify the documents you upload.</li>
       <li>Do not use this website for illegal content or activities.</li>
-      <li>We are not liable for any loss of data or other damages related to your use of this tool.</li>
+      <li>We are not liable for data loss, file corruption, or any other damages related to your use of this tool.</li>
     </ul>
   </section>
 
@@ -597,14 +756,13 @@
   <section class="section" id="contact">
     <h2>Contact</h2>
     <p>
-      For feedback, feature requests, or bug reports, you can add a contact method here,
-      for example an email address like
-      <strong>support@example.com</strong> or a form linked to your own backend.
+      You can customize this section with your own contact details, for example:
+      <strong>support@example.com</strong> or links to your social profiles.
     </p>
   </section>
 
   <footer>
-    <div>© <span id="year"></span> MergePDF. All rights reserved.</div>
+    <div>© <span id="year"></span> PDF Studio. All rights reserved.</div>
     <div class="footer-links">
       <a href="#faq">FAQ</a>
       <a href="#privacy">Privacy Policy</a>
@@ -614,15 +772,18 @@
   </footer>
 </div>
 
-<!-- PDF-LIB library from CDN -->
+<!-- LIBRARIES -->
 <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
 <script>
-  // Theme handling
+  // --- THEME SWITCHER ---
   const body = document.body;
   const themeToggle = document.getElementById("themeToggle");
   const themeIcon = document.getElementById("themeIcon");
   const themeText = document.getElementById("themeText");
+  const yearSpan = document.getElementById("year");
+  yearSpan.textContent = new Date().getFullYear();
 
   function applyTheme(theme) {
     if (theme === "dark") {
@@ -636,9 +797,8 @@
     }
   }
 
-  // Initialize theme based on localStorage or system preference
   (function initTheme() {
-    const stored = localStorage.getItem("mergepdf-theme");
+    const stored = localStorage.getItem("pdfstudio-theme");
     if (stored === "dark" || stored === "light") {
       applyTheme(stored);
     } else {
@@ -652,73 +812,84 @@
     const isDark = body.classList.contains("dark");
     const next = isDark ? "light" : "dark";
     applyTheme(next);
-    localStorage.setItem("mergepdf-theme", next);
+    localStorage.setItem("pdfstudio-theme", next);
   });
 
-  // PDF merge logic
+  // --- TAB SWITCHING ---
+  const tabButtons = document.querySelectorAll(".tool-tab");
+  const toolPanels = document.querySelectorAll(".tool-panel");
+
+  tabButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const tool = btn.getAttribute("data-tool");
+      tabButtons.forEach(b => b.classList.remove("active"));
+      toolPanels.forEach(panel => {
+        panel.classList.toggle("active", panel.getAttribute("data-tool-panel") === tool);
+      });
+      btn.classList.add("active");
+    });
+  });
+
+  // --- PDF-LIB & PDF.JS ---
   const { PDFDocument } = PDFLib;
-  const fileInput = document.getElementById("pdfFiles");
-  const mergeBtn = document.getElementById("mergeBtn");
-  const statusEl = document.getElementById("status");
-  const fileSummaryEl = document.getElementById("fileSummary");
-  const yearSpan = document.getElementById("year");
-
-  yearSpan.textContent = new Date().getFullYear();
-
-  function setStatus(message, type = "") {
-    statusEl.textContent = message;
-    statusEl.className = "status " + (type ? type : "");
+  if (window["pdfjsLib"]) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
   }
 
-  function updateFileSummary(files) {
+  // Utility for statuses
+  function setStatus(el, message, type = "") {
+    el.textContent = message;
+    el.className = "status" + (type ? " " + type : "");
+  }
+
+  // --- MERGE TOOL ---
+  const mergeFilesInput = document.getElementById("mergeFiles");
+  const mergeSummary = document.getElementById("mergeSummary");
+  const mergeBtn = document.getElementById("mergeBtn");
+  const mergeStatus = document.getElementById("mergeStatus");
+
+  function updateMergeSummary(files) {
     if (!files.length) {
-      fileSummaryEl.textContent = "No files selected yet.";
+      mergeSummary.textContent = "No files selected yet.";
       return;
     }
     if (files.length === 1) {
-      fileSummaryEl.textContent = "1 file selected: " + files[0].name;
+      mergeSummary.textContent = "1 file selected: " + files[0].name;
       return;
     }
-    const names = Array.from(files)
-      .slice(0, 3)
-      .map((f) => f.name)
-      .join(", ");
-    const more = files.length > 3 ? ` + ${files.length - 3} more` : "";
-    fileSummaryEl.textContent = `${files.length} files selected: ${names}${more}`;
+    const names = Array.from(files).slice(0, 3).map(f => f.name).join(", ");
+    const more = files.length > 3 ? " + " + (files.length - 3) + " more" : "";
+    mergeSummary.textContent = `${files.length} files selected: ${names}${more}`;
   }
 
-  fileInput.addEventListener("change", () => {
-    updateFileSummary(fileInput.files);
-    setStatus("");
+  mergeFilesInput.addEventListener("change", () => {
+    updateMergeSummary(mergeFilesInput.files);
+    setStatus(mergeStatus, "");
   });
 
   async function mergePdfs(files) {
     if (!files.length) {
-      setStatus("Please select at least one PDF file.", "error");
+      setStatus(mergeStatus, "Please select at least one PDF file.", "error");
       return;
     }
     if (files.length === 1) {
-      setStatus("Select 2 or more PDFs to merge.", "error");
+      setStatus(mergeStatus, "Select 2 or more PDFs to merge.", "error");
       return;
     }
 
     mergeBtn.disabled = true;
-    setStatus("Merging PDFs, please wait...");
+    setStatus(mergeStatus, "Merging PDFs, please wait...");
 
     try {
       const mergedPdf = await PDFDocument.create();
-
-      // Loop through selected files in order
       for (const file of files) {
         const arrayBuffer = await file.arrayBuffer();
         const pdf = await PDFDocument.load(arrayBuffer);
         const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-        copiedPages.forEach((page) => mergedPdf.addPage(page));
+        copiedPages.forEach(page => mergedPdf.addPage(page));
       }
-
       const mergedBytes = await mergedPdf.save();
-
-      // Trigger download
       const blob = new Blob([mergedBytes], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -728,19 +899,314 @@
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
-
-      setStatus("Merged PDF downloaded successfully! 🎉", "success");
+      setStatus(mergeStatus, "Merged PDF downloaded successfully! 🎉", "success");
     } catch (err) {
       console.error(err);
-      setStatus("Error while merging PDFs. Please try again with fewer or smaller files.", "error");
+      setStatus(mergeStatus, "Error while merging PDFs. Try fewer or smaller files.", "error");
     } finally {
       mergeBtn.disabled = false;
     }
   }
 
   mergeBtn.addEventListener("click", () => {
-    const files = Array.from(fileInput.files);
-    mergePdfs(files);
+    mergePdfs(Array.from(mergeFilesInput.files));
+  });
+
+  // --- JPG TO PDF ---
+  const imgFilesInput = document.getElementById("imgFiles");
+  const imgSummary = document.getElementById("imgSummary");
+  const imgToPdfBtn = document.getElementById("imgToPdfBtn");
+  const imgStatus = document.getElementById("imgStatus");
+
+  function updateImgSummary(files) {
+    if (!files.length) {
+      imgSummary.textContent = "No images selected yet.";
+      return;
+    }
+    const names = Array.from(files).slice(0, 3).map(f => f.name).join(", ");
+    const more = files.length > 3 ? " + " + (files.length - 3) + " more" : "";
+    imgSummary.textContent = `${files.length} image(s) selected: ${names}${more}`;
+  }
+
+  imgFilesInput.addEventListener("change", () => {
+    updateImgSummary(imgFilesInput.files);
+    setStatus(imgStatus, "");
+  });
+
+  async function imagesToPdf(files) {
+    if (!files.length) {
+      setStatus(imgStatus, "Please select at least one image.", "error");
+      return;
+    }
+
+    imgToPdfBtn.disabled = true;
+    setStatus(imgStatus, "Building PDF from images...");
+
+    try {
+      const pdfDoc = await PDFDocument.create();
+
+      for (const file of files) {
+        const bytes = await file.arrayBuffer();
+        const type = file.type || "";
+        let img;
+        if (type.includes("png") || file.name.toLowerCase().endsWith(".png")) {
+          img = await pdfDoc.embedPng(bytes);
+        } else {
+          img = await pdfDoc.embedJpg(bytes);
+        }
+
+        const { width, height } = img;
+        const maxWidth = 595;   // approx A4 width in points
+        const scale = width > maxWidth ? maxWidth / width : 1;
+        const pageWidth = width * scale;
+        const pageHeight = height * scale;
+        const page = pdfDoc.addPage([pageWidth, pageHeight]);
+        page.drawImage(img, {
+          x: 0,
+          y: 0,
+          width: pageWidth,
+          height: pageHeight,
+        });
+      }
+
+      const pdfBytes = await pdfDoc.save();
+      const blob = new Blob([pdfBytes], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "images-to-pdf.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+
+      setStatus(imgStatus, "PDF created from images and downloaded. 🎉", "success");
+    } catch (err) {
+      console.error(err);
+      setStatus(imgStatus, "Error converting images to PDF.", "error");
+    } finally {
+      imgToPdfBtn.disabled = false;
+    }
+  }
+
+  imgToPdfBtn.addEventListener("click", () => {
+    imagesToPdf(Array.from(imgFilesInput.files));
+  });
+
+  // --- PDF TO JPG (FIRST PAGE) ---
+  const pdfToJpgFile = document.getElementById("pdfToJpgFile");
+  const pdfToJpgSummary = document.getElementById("pdfToJpgSummary");
+  const pdfToJpgBtn = document.getElementById("pdfToJpgBtn");
+  const pdfToJpgStatus = document.getElementById("pdfToJpgStatus");
+  const jpgPreview = document.getElementById("jpgPreview");
+
+  pdfToJpgFile.addEventListener("change", () => {
+    if (!pdfToJpgFile.files.length) {
+      pdfToJpgSummary.textContent = "No PDF selected yet.";
+    } else {
+      pdfToJpgSummary.textContent = "Selected: " + pdfToJpgFile.files[0].name;
+    }
+    setStatus(pdfToJpgStatus, "");
+    jpgPreview.style.display = "none";
+    jpgPreview.src = "";
+  });
+
+  async function pdfFirstPageToJpg(file) {
+    if (!file) {
+      setStatus(pdfToJpgStatus, "Please select a PDF file.", "error");
+      return;
+    }
+    if (!window["pdfjsLib"]) {
+      setStatus(pdfToJpgStatus, "PDF.js library failed to load.", "error");
+      return;
+    }
+
+    pdfToJpgBtn.disabled = true;
+    setStatus(pdfToJpgStatus, "Rendering first page to JPG...");
+
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+      const pdf = await loadingTask.promise;
+      const page = await pdf.getPage(1);
+
+      const viewport = page.getViewport({ scale: 1.5 });
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+
+      const renderContext = {
+        canvasContext: context,
+        viewport: viewport,
+      };
+      await page.render(renderContext).promise;
+
+      canvas.toBlob((blob) => {
+        if (!blob) {
+          setStatus(pdfToJpgStatus, "Failed to create JPG image.", "error");
+          pdfToJpgBtn.disabled = false;
+          return;
+        }
+        const url = URL.createObjectURL(blob);
+
+        // Preview
+        jpgPreview.src = url;
+        jpgPreview.style.display = "block";
+
+        // Download
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "page-1.jpg";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        setStatus(pdfToJpgStatus, "JPG created and downloaded (first page).", "success");
+      }, "image/jpeg", 0.92);
+    } catch (err) {
+      console.error(err);
+      setStatus(pdfToJpgStatus, "Error converting PDF to JPG.", "error");
+    } finally {
+      pdfToJpgBtn.disabled = false;
+    }
+  }
+
+  pdfToJpgBtn.addEventListener("click", () => {
+    const file = pdfToJpgFile.files[0];
+    pdfFirstPageToJpg(file);
+  });
+
+  // --- COMPRESS (BASIC RESAVE) ---
+  const compressFileInput = document.getElementById("compressFile");
+  const compressSummary = document.getElementById("compressSummary");
+  const compressBtn = document.getElementById("compressBtn");
+  const compressStatus = document.getElementById("compressStatus");
+
+  compressFileInput.addEventListener("change", () => {
+    if (!compressFileInput.files.length) {
+      compressSummary.textContent = "No PDF selected yet.";
+    } else {
+      compressSummary.textContent = "Selected: " + compressFileInput.files[0].name;
+    }
+    setStatus(compressStatus, "");
+  });
+
+  async function compressPdf(file) {
+    if (!file) {
+      setStatus(compressStatus, "Please select a PDF file.", "error");
+      return;
+    }
+
+    compressBtn.disabled = true;
+    setStatus(compressStatus, "Re-saving PDF (basic compression)...");
+
+    try {
+      const bytes = await file.arrayBuffer();
+      const pdf = await PDFDocument.load(bytes);
+      const newPdf = await PDFDocument.create();
+      const copiedPages = await newPdf.copyPages(pdf, pdf.getPageIndices());
+      copiedPages.forEach(p => newPdf.addPage(p));
+
+      const newBytes = await newPdf.save();
+      const blob = new Blob([newBytes], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "compressed.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+
+      setStatus(compressStatus, "Compressed PDF downloaded (results vary by file).", "success");
+    } catch (err) {
+      console.error(err);
+      setStatus(compressStatus, "Error while compressing PDF.", "error");
+    } finally {
+      compressBtn.disabled = false;
+    }
+  }
+
+  compressBtn.addEventListener("click", () => {
+    const file = compressFileInput.files[0];
+    compressPdf(file);
+  });
+
+  // --- EDIT (EXTRACT PAGES) ---
+  const editFileInput = document.getElementById("editFile");
+  const editSummary = document.getElementById("editSummary");
+  const editFrom = document.getElementById("editFrom");
+  const editTo = document.getElementById("editTo");
+  const editBtn = document.getElementById("editBtn");
+  const editStatus = document.getElementById("editStatus");
+
+  editFileInput.addEventListener("change", () => {
+    if (!editFileInput.files.length) {
+      editSummary.textContent = "No PDF selected yet.";
+    } else {
+      editSummary.textContent = "Selected: " + editFileInput.files[0].name;
+    }
+    setStatus(editStatus, "");
+  });
+
+  async function extractPages(file, fromPage, toPage) {
+    if (!file) {
+      setStatus(editStatus, "Please select a PDF file.", "error");
+      return;
+    }
+    if (!fromPage || !toPage || fromPage < 1 || toPage < fromPage) {
+      setStatus(editStatus, "Please enter a valid page range.", "error");
+      return;
+    }
+
+    editBtn.disabled = true;
+    setStatus(editStatus, "Extracting pages...");
+
+    try {
+      const bytes = await file.arrayBuffer();
+      const pdf = await PDFDocument.load(bytes);
+      const total = pdf.getPageCount();
+      if (fromPage > total) {
+        setStatus(editStatus, "From page is beyond total page count (" + total + ").", "error");
+        editBtn.disabled = false;
+        return;
+      }
+      const last = Math.min(toPage, total);
+
+      const newPdf = await PDFDocument.create();
+      const indices = [];
+      for (let i = fromPage - 1; i <= last - 1; i++) {
+        indices.push(i);
+      }
+      const copiedPages = await newPdf.copyPages(pdf, indices);
+      copiedPages.forEach(p => newPdf.addPage(p));
+
+      const newBytes = await newPdf.save();
+      const blob = new Blob([newBytes], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `pages-${fromPage}-to-${last}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+
+      setStatus(editStatus, "New PDF with selected pages downloaded. 🎉", "success");
+    } catch (err) {
+      console.error(err);
+      setStatus(editStatus, "Error extracting pages from PDF.", "error");
+    } finally {
+      editBtn.disabled = false;
+    }
+  }
+
+  editBtn.addEventListener("click", () => {
+    const file = editFileInput.files[0];
+    const from = parseInt(editFrom.value, 10);
+    const to = parseInt(editTo.value, 10);
+    extractPages(file, from, to);
   });
 </script>
 </body>
