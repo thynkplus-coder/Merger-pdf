@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Simple PDF Merger</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f4f5fb;
+    }
+
+    .container {
+      background: #ffffff;
+      padding: 24px 20px;
+      max-width: 420px;
+      width: 95%;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+      font-size: 1.3rem;
+      margin: 0 0 8px;
+      text-align: center;
+    }
+
+    p.subtitle {
+      margin: 0 0 16px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    label {
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      background: #fafafa;
+      font-size: 0.9rem;
+    }
+
+    .btn {
+      width: 100%;
+      margin-top: 14px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: #111827;
+      color: #ffffff;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .status {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      text-align: center;
+      color: #555;
+      min-height: 1.2em;
+    }
+
+    .status.error {
+      color: #b91c1c;
+    }
+
+    .status.success {
+      color: #15803d;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>PDF Merger</h1>
+    <p class="subtitle">Select multiple PDF files and merge them into one.</p>
+
+    <div>
+      <label for="pdfFiles">Choose PDF files (in order):</label>
+      <input id="pdfFiles" type="file" accept="application/pdf" multiple />
+    </div>
+
+    <button id="mergeBtn" class="btn">Merge PDFs</button>
+
+    <div id="status" class="status"></div>
+  </div>
+
+  <!-- PDF-LIB library from CDN -->
+  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+
+  <script>
+    const { PDFDocument } = PDFLib;
+
+    const fileInput = document.getElementById("pdfFiles");
+    const mergeBtn = document.getElementById("mergeBtn");
+    const statusEl = document.getElementById("status");
+
+    function setStatus(message, type = "") {
+      statusEl.textContent = message;
+      statusEl.className = "status " + (type ? type : "");
+    }
+
+    async function mergePdfs(files) {
+      if (!files.length) {
+        setStatus("Please select at least one PDF file.", "error");
+        return;
+      }
+
+      mergeBtn.disabled = true;
+      setStatus("Merging PDFs, please wait...");
+
+      try {
+        const mergedPdf = await PDFDocument.create();
+
+        // Loop through selected files in order
+        for (const file of files) {
+          const arrayBuffer = await file.arrayBuffer();
+          const pdf = await PDFDocument.load(arrayBuffer);
+          const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+          copiedPages.forEach((page) => mergedPdf.addPage(page));
+        }
+
+        const mergedBytes = await mergedPdf.save();
+
+        // Trigger download
+        const blob = new Blob([mergedBytes], { type: "application/pdf" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "merged.pdf";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+
+        setStatus("Merged PDF downloaded successfully! 🎉", "success");
+      } catch (err) {
+        console.error(err);
+        setStatus("Error while merging PDFs. Check the console for details.", "error");
+      } finally {
+        mergeBtn.disabled = false;
+      }
+    }
+
+    mergeBtn.addEventListener("click", () => {
+      const files = Array.from(fileInput.files);
+      mergePdfs(files);
+    });
+  </script>
+</body>
+</html>
